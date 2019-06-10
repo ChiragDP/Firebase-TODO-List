@@ -248,21 +248,22 @@ class ToDoListViewVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                         
                         if let todoElement = firChild.value as? [String:AnyObject] {
                             
-                            let strComplete = todoElement["isCompleted"] as? String
-                            
-                            let todo = ToDo()
-                            todo.key = firChild.key
-                            todo.name = todoElement["name"] as? String
-                            todo.message = todoElement["message"] as? String
-                            todo.reminderDate = todoElement["date"] as? String
-                            
-                            if strComplete == "1"{
-                                todo.isComplete = "1"
-                                self.todoListCompleted.append(todo)
-                            }
-                            else {
-                                todo.isComplete = "0"
-                                self.todoListPending.append(todo)
+                            if let strComplete = todoElement["isCompleted"] as? String {
+                                
+                                let todo = ToDo()
+                                todo.key = firChild.key
+                                todo.name = todoElement["name"] as? String
+                                todo.message = todoElement["message"] as? String
+                                todo.reminderDate = todoElement["date"] as? String
+                                
+                                if strComplete == "1" {
+                                    todo.isComplete = "1"
+                                    self.todoListCompleted.append(todo)
+                                }
+                                else {
+                                    todo.isComplete = "0"
+                                    self.todoListPending.append(todo)
+                                }
                             }
                         }
                     }
@@ -291,7 +292,7 @@ class ToDoListViewVC: UIViewController,UITableViewDelegate,UITableViewDataSource
             
             if (error != nil) {
                 print(error!)
-                Utility.showAlertViewController(title: "Firebase Errore", message: error?.localizedDescription, onViewController: self)
+                Utility.showAlertViewController(title: "Firebase Errore", message: error?.localizedDescription ?? "", onViewController: self)
             }
         })
     }
@@ -302,7 +303,7 @@ class ToDoListViewVC: UIViewController,UITableViewDelegate,UITableViewDataSource
         ref.child("todoList").child(todo.key!).removeValue(completionBlock: { (error, reference) in
             if (error != nil) {
                 print(error!)
-                Utility.showAlertViewController(title: "Firebase Errore", message: error?.localizedDescription, onViewController: self)
+                Utility.showAlertViewController(title: "Firebase Errore", message: error?.localizedDescription ?? "", onViewController: self)
             }
         })
     }
